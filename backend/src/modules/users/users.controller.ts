@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../middlewares/authenticate';
 import {
     getAllUsers,
+    createUser,
     updateUserRole,
     toggleUserActive,
 } from './users.service';
@@ -14,6 +15,25 @@ export const listUsers = async (
     try {
         const users = await getAllUsers();
         res.status(200).json({ success: true, users });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const createUserController = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { name, email, role } = req.body;
+        const result = await createUser(name, email, role);
+        res.status(201).json({
+            success: true,
+            message: `User created. Share the temp password with them — it will not be shown again.`,
+            user: result.user,
+            tempPassword: result.tempPassword,
+        });
     } catch (err) {
         next(err);
     }

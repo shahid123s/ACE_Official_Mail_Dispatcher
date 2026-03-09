@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { loginRequest } from "../lib/api";
@@ -7,6 +7,8 @@ import { loginRequest } from "../lib/api";
 const LoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const successMessage = (location.state as { message?: string })?.message;
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,7 +22,11 @@ const LoginPage = () => {
         try {
             const data = await loginRequest(email, password);
             login(data.token, data.user);
-            navigate("/");
+            if (data.mustChangePassword) {
+                navigate("/change-password");
+            } else {
+                navigate("/");
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : "Login failed");
         } finally {
@@ -51,6 +57,11 @@ const LoginPage = () => {
 
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="px-8 py-7 space-y-5">
+                        {successMessage && (
+                            <div className="text-sm text-primary bg-primary/10 border border-primary/20 rounded-lg px-4 py-3">
+                                {successMessage}
+                            </div>
+                        )}
                         {error && (
                             <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">
                                 {error}

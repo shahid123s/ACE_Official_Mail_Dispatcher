@@ -17,7 +17,28 @@ export const loginRequest = async (email: string, password: string) => {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Login failed");
     }
-    return res.json() as Promise<{ token: string; user: { id: string; name: string; email: string; role: "admin" | "user" } }>;
+    return res.json() as Promise<{
+        token: string;
+        mustChangePassword: boolean;
+        user: { id: string; name: string; email: string; role: "admin" | "user" };
+    }>;
+};
+
+export const changePasswordRequest = async (
+    token: string,
+    currentPassword: string,
+    newPassword: string
+) => {
+    const res = await fetch(`${BASE_URL}/auth/change-password`, {
+        method: "POST",
+        headers: getHeaders(token),
+        body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to change password");
+    }
+    return res.json();
 };
 
 // ─── Mail ──────────────────────────────────────────────────────────────────────
@@ -99,4 +120,27 @@ export const toggleUserActiveRequest = async (
         throw new Error(err.message || "Failed to update user status");
     }
     return res.json();
+};
+
+export const createUserRequest = async (
+    token: string,
+    name: string,
+    email: string,
+    role: "admin" | "user"
+) => {
+    const res = await fetch(`${BASE_URL}/users`, {
+        method: "POST",
+        headers: getHeaders(token),
+        body: JSON.stringify({ name, email, role }),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to create user");
+    }
+    return res.json() as Promise<{
+        success: boolean;
+        message: string;
+        user: { id: string; name: string; email: string; role: "admin" | "user"; active: boolean };
+        tempPassword: string;
+    }>;
 };

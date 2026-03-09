@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import ComposePage from "./pages/ComposePage";
 import SentPage from "./pages/SentPage";
 import UsersPage from "./pages/UsersPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 function App() {
   return (
@@ -15,6 +16,16 @@ function App() {
         <Routes>
           {/* Public */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* First-login password change — requires token but no full guard */}
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePasswordPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Protected layout */}
           <Route
