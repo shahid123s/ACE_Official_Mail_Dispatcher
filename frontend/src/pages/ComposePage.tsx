@@ -2,11 +2,13 @@ import { useState, type FormEvent } from "react";
 import { Send, ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { sendMailRequest, type SendMailPayload } from "../lib/api";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const MAX_BCC_CC = 10;
 
 const ComposePage = () => {
     const { token, user } = useAuth();
+    usePageTitle("Compose");
 
     const [to, setTo] = useState("");
     const [subject, setSubject] = useState("");
@@ -98,8 +100,8 @@ const ComposePage = () => {
             {toast && (
                 <div
                     className={`mb-6 px-4 py-3 rounded-lg text-sm font-medium border ${toast.type === "success"
-                            ? "bg-accent/20 border-accent text-accent-foreground"
-                            : "bg-destructive/10 border-destructive/30 text-destructive"
+                        ? "bg-accent/20 border-accent text-accent-foreground"
+                        : "bg-destructive/10 border-destructive/30 text-destructive"
                         }`}
                 >
                     {toast.msg}

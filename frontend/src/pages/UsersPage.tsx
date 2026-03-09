@@ -19,6 +19,7 @@ import {
     toggleUserActiveRequest,
     createUserRequest,
 } from "../lib/api";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 interface UserRecord {
     id: string;
@@ -37,6 +38,7 @@ interface TempPasswordModal {
 
 const UsersPage = () => {
     const { token } = useAuth();
+    usePageTitle("Manage Users");
     const [users, setUsers] = useState<UserRecord[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");

@@ -3,12 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { loginRequest } from "../lib/api";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const LoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const successMessage = (location.state as { message?: string })?.message;
+    usePageTitle("Sign In");
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

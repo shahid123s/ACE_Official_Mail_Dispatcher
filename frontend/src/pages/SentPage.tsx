@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Mail, Clock, Search, RefreshCw } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { getSentMailsRequest } from "../lib/api";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 interface SentMail {
     id: string;
@@ -14,6 +15,7 @@ interface SentMail {
 
 const SentPage = () => {
     const { token } = useAuth();
+    usePageTitle("Sent Messages");
     const [mails, setMails] = useState<SentMail[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");

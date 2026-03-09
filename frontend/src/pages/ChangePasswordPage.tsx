@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Lock, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { changePasswordRequest } from "../lib/api";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const ChangePasswordPage = () => {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
+    usePageTitle("Set New Password");
 
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
